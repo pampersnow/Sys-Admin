@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.trs.proj.mapper.UserInfoMapper">
+ 
+    <sql id="BASE_COLUMN">
+        uid,name,password,salt,state,username
+    </sql>
+    <sql id="BASE_TABLE">
+        user_info
+    </sql>
+    <sql id="USERNAME">
+        username
+    </sql>
+    <sql id="ROLEID">
+        role_id
+    </sql>
+    <sql id="USERROLE">
+        sys_user_role
+    </sql>
+    <sql id="ROLE_COLUMN">
+        id,available,description,role
+    </sql>
+    <sql id="ROLETABLE">
+        sys_role
+    </sql>
+    <sql id="PERMISSIONID">
+      permission_id
+    </sql>
+    <sql id="ROLEPERMISSION">
+      sys_role_permission
+    </sql>
+    <sql id="PERMISSIONCOLUNMN">
+        id,available,name,parent_id,parent_ids,permission,resource_type,url
+    </sql>
+    <sql id="PERMISSIONTABLE">
+        sys_permission
+    </sql>
+    <select id="selectByUsername" resultType="com.trs.proj.domain.UserInfo" parameterType="java.lang.String">
+        select
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+        WHERE
+        <include refid="USERNAME"/>
+        <trim prefix="=">
+          #{username,jdbcType=VARCHAR}
+        </trim>
+    </select>
+    <select id="selectRoleidByUid" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="ROLEID"/>
+        FROM
+        <include refid="USERROLE"/>
+        WHERE uid
+        <trim prefix="=">
+            #{uid,jdbcType=INTEGER}
+        </trim>
+    </select>
+    <select id="selectRoleById" resultType="com.trs.proj.domain.Role" >
+        SELECT
+        <include refid="ROLE_COLUMN"/>
+        FROM
+        <include refid="ROLETABLE"/>
+        WHERE id
+        <trim prefix="=">
+            #{id, jdbcType=INTEGER}
+        </trim>
+    </select>
+    <select id="selectPermissionidByRoleid" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="PERMISSIONID"/>
+        FROM
+        <include refid="ROLEPERMISSION"/>
+        where
+        <include refid="ROLEID"/>
+        <trim prefix="=">
+            #{roleid, jdbcType=INTEGER}
+        </trim>
+    </select>
+    <select id="selectPermissionById" resultType="com.trs.proj.domain.Permission">
+        SELECT 
+        <include refid="PERMISSIONCOLUNMN"/>
+        FROM
+        <include refid="PERMISSIONTABLE"/>
+        WHERE id
+        <trim prefix="=">
+          #{id, jdbcType=INTEGER}
+        </trim>
+    </select>
+</mapper>
